@@ -14,46 +14,57 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = {
     -- LSP
     {
-	"neovim/nvim-lspconfig", 
-	config = function()
-	    require("setup.lsp")
-	end
+        "neovim/nvim-lspconfig",
+        config = function()
+            require("setup.lsp")
+        end
     },
     -- Syntax highlighting
     {
-	"nvim-treesitter/nvim-treesitter", 
-    	build = ":TSUpdate",
-	config = function()
-  	    require("setup.treesitter")
-	end
-	
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        config = function()
+            require("setup.treesitter")
+        end
     },
     -- Text editing
     {
         "kylechui/nvim-surround",
         version = "*", -- Use for stability; omit to use `main` branch for the latest features
         event = "VeryLazy",
-	config = function()
-	    require("nvim-surround").setup()
-	end
+        config = function()
+            require("nvim-surround").setup()
+        end
     },
+    -- Fuzzy finder
     {
-	'nvim-telescope/telescope.nvim', 
-	tag = '0.1.3',
-      	dependencies = { 'nvim-lua/plenary.nvim' },
-	config = function()
-	    require("setup.telescope")
-	end
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.3',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            require("setup.telescope")
+        end
     },
     -- Devicons
     {
-	'nvim-tree/nvim-web-devicons'
+        'nvim-tree/nvim-web-devicons'
     },
+    -- Colorscheme
     {
-	'mhartington/oceanic-next'
+        'mhartington/oceanic-next',
+        config = function()
+            vim.cmd('colorscheme OceanicNext')
+        end
+
+    },
+    -- Statusline
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            require('lualine').setup({ options = { theme = 'onedark' } })
+        end
     }
 }
 
 require("lazy").setup(plugins)
-vim.cmd 'set t_Co=256'
-vim.cmd 'colorscheme OceanicNext'
