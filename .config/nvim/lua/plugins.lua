@@ -32,9 +32,7 @@ local plugins = {
         "kylechui/nvim-surround",
         version = "*", -- Use for stability; omit to use `main` branch for the latest features
         event = "VeryLazy",
-        config = function()
-            require("nvim-surround").setup()
-        end
+        config = true
     },
     -- Fuzzy finder
     {
@@ -62,7 +60,7 @@ local plugins = {
         'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
-            require('lualine').setup({ options = { theme = 'onedark' } })
+            require('setup.lualine')
         end
     }
 }
