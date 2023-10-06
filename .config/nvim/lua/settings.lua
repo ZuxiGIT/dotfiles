@@ -16,9 +16,8 @@ set.softtabstop = 4     -- 4 spaces in tab
 set.autoindent = true
 
 -- Mouse
-
 set.mousehide = true
-set.mouse = "a" 
+set.mouse = "a"
 
 -- Misc
 set.wrap = true
@@ -26,3 +25,4 @@ set.linebreak = true
 
 set.fileencodings="utf8,cp1251"
 set.ruler = true
+set.swapfile = false

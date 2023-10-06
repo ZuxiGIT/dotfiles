@@ -12,12 +12,26 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
+    -- LSP support
+    {
+        'williamboman/mason.nvim',
+        config = true
+    },
+    {
+        'williamboman/mason-lspconfig.nvim',
+        config = function()
+            require("setup.mason-lspconfig")
+        end,
+        dependencies = { 'williamboman/mason.nvim' }
+
+    },
     -- LSP
     {
         "neovim/nvim-lspconfig",
         config = function()
             require("setup.lsp")
-        end
+        end,
+        dependencies = { 'williamboman/mason-lspconfig.nvim' }
     },
     -- Syntax highlighting
     {
