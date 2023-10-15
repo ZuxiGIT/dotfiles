@@ -1,5 +1,8 @@
 vim.cmd('unmap Y')
 
+vim.g.mapleader = " "
+vim.keymap.set('n', '<leader>ex', vim.cmd.Ex) -- file explorer
+
 local set = vim.opt
 
 set.colorcolumn = "80"
