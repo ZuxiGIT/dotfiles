@@ -5,7 +5,7 @@ vim.keymap.set('n', '<leader>ex', vim.cmd.Ex) -- file explorer
 
 local set = vim.opt
 
-set.colorcolumn = "80"
+set.colorcolumn = "120"
 set.cursorline = true
 set.number = true
 set.relativenumber = true
