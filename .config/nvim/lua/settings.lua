@@ -1,7 +1,7 @@
 vim.cmd('unmap Y')
 
-vim.g.mapleader = " "
-vim.keymap.set('n', '<leader>ex', vim.cmd.Ex) -- file explorer
+
+vim.keymap.set('n', '<space>ex', vim.cmd.Ex) -- file explorer
 
 local set = vim.opt
 
@@ -29,3 +29,4 @@ set.linebreak = true
 set.fileencodings="utf8,cp1251"
 set.ruler = true
 set.swapfile = false
+set.hlsearch = false
