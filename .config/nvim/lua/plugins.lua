@@ -62,10 +62,18 @@ local plugins = {
         'nvim-tree/nvim-web-devicons'
     },
     -- Colorscheme
+    -- {
+    --     'mhartington/oceanic-next',
+    --     config = function()
+    --         vim.cmd('colorscheme OceanicNext')
+    --     end
+
+    -- },
     {
-        'mhartington/oceanic-next',
+        'navarasu/onedark.nvim',
         config = function()
-            vim.cmd('colorscheme OceanicNext')
+            require('onedark').setup({ style = 'warmer' })
+            require('onedark').load()
         end
 
     },
