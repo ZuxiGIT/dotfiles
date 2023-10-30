@@ -76,6 +76,45 @@ local plugins = {
         config = function()
             require('setup.lualine')
         end
+    },
+    -- DAP
+	{
+		"mfussenegger/nvim-dap",
+		config = function()
+			require("setup.dap")
+		end,
+	},
+
+	{
+		"rcarriga/nvim-dap-ui",
+		requires = { "mfussenegger/nvim-dap" },
+		config = function() require("dapui").setup() end
+	},
+
+	{
+		"theHamsta/nvim-dap-virtual-text",
+		requires = { "mfussenegger/nvim-dap" },
+		config = true
+	},
+    -- Nvim tree
+    {
+        'nvim-tree/nvim-tree.lua',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        init = function()
+            -- disable netrw at the very start of your init.lua
+            vim.g.loaded_netrw = 1
+            vim.g.loaded_netrwPlugin = 1
+        end,
+        config = true
+    },
+    -- which-key
+    {
+        'folke/which-key.nvim',
+        event = "VeryLazy",
+        init = function()
+            vim.o.timeout = true
+            vim.o.timeoutlen = 300
+        end
     }
 }
 
