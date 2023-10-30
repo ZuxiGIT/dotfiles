@@ -115,7 +115,11 @@ local plugins = {
             vim.o.timeout = true
             vim.o.timeoutlen = 300
         end
-    }
+    },
+    -- Fugitive
+    {
+        "tpope/vim-fugitive",
+    },
 }
 
 require("lazy").setup(plugins)
