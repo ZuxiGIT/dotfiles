@@ -87,13 +87,13 @@ local plugins = {
 
 	{
 		"rcarriga/nvim-dap-ui",
-		requires = { "mfussenegger/nvim-dap" },
+		dependencies = { "mfussenegger/nvim-dap" },
 		config = function() require("dapui").setup() end
 	},
 
 	{
 		"theHamsta/nvim-dap-virtual-text",
-		requires = { "mfussenegger/nvim-dap" },
+		dependencies = { "mfussenegger/nvim-dap" },
 		config = true
 	},
     -- Nvim tree
