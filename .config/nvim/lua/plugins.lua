@@ -112,7 +112,9 @@ local plugins = {
             vim.g.loaded_netrw = 1
             vim.g.loaded_netrwPlugin = 1
         end,
-        config = true
+        config = function()
+            require('setup.nvim-tree')
+        end
     },
     -- which-key
     {
