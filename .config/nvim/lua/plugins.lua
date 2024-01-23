@@ -123,6 +123,9 @@ local plugins = {
         init = function()
             vim.o.timeout = true
             vim.o.timeoutlen = 300
+        end,
+        config = function()
+            require('setup.which-key')
         end
     },
     -- Fugitive
