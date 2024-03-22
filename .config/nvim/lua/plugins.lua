@@ -85,24 +85,27 @@ local plugins = {
         end
     },
     -- DAP
-	{
-		'mfussenegger/nvim-dap',
-		config = function()
-			require('setup.dap')
-		end,
-	},
+    {
+        "nvim-neotest/nvim-nio"
+    },
+    {
+        'mfussenegger/nvim-dap',
+        config = function()
+            require('setup.dap')
+        end,
+    },
 
-	{
-		'rcarriga/nvim-dap-ui',
-		dependencies = { 'mfussenegger/nvim-dap' },
-		config = function() require('dapui').setup() end
-	},
+    {
+        'rcarriga/nvim-dap-ui',
+        dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
+        config = function() require('dapui').setup() end
+    },
 
-	{
-		'theHamsta/nvim-dap-virtual-text',
-		dependencies = { 'mfussenegger/nvim-dap' },
-		config = true
-	},
+    {
+        'theHamsta/nvim-dap-virtual-text',
+        dependencies = { 'mfussenegger/nvim-dap' },
+        config = true
+    },
     -- Nvim tree
     {
         'nvim-tree/nvim-tree.lua',
