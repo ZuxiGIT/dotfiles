@@ -38,3 +38,8 @@ fi
 if ask "Do you want to install nvim config?"; then
     ln -s "$(realpath ".config/nvim")" ~/.config/nvim
 fi
+
+# Gdbinit 
+if ask "Do you want to install .gdbinit?"; then
+    ln -s "$(realpath ".gdbinit")" ~/.gdbinit
+fi
