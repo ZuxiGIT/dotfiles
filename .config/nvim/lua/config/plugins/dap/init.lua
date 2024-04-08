@@ -8,10 +8,10 @@ return {
             local dap = require("dap")
 
             -- ui
-            require("plugins.dap.ui")
+            require("config.plugins.dap.ui")
 
             -- debuggers
-            local lldb = require("plugins.dap.adapters.lldb")
+            local lldb = require("config.plugins.dap.adapters.lldb")
 
             dap.adapters.lldb = lldb.adapter
 

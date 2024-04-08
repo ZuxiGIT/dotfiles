@@ -1,2 +1,2 @@
-require('settings')
-require('lazy_plugins')
+require('config.core')
+require('config.lazy')

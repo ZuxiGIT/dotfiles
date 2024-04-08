@@ -1,14 +1,5 @@
 vim.cmd('unmap Y')
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    pattern = {"*"},
-    callback = function()
-      local save_cursor = vim.fn.getpos(".")
-      pcall(function() vim.cmd [[%s/\s\+$//e]] end)
-      vim.fn.setpos(".", save_cursor)
-    end,
-})
-
-vim.keymap.set('n', '<space>ex', vim.cmd.Ex) -- file explorer
+vim.cmd('let g:netrw_listtyle = 3')
 
 local set = vim.opt
 
