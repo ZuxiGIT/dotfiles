@@ -16,7 +16,9 @@ function ask() {
 SH="${HOME}/.bashrc"
 
 echo >> "$SH"
-echo '# -------------- automatically added: dotfiles install ---------------' >> "$SH"
+echo "# -------------- automatically added: dotfiles install ---------------" >> "$SH"
+echo "export EDITOR=nvim"
+echo "export TIG_EDITOR=nvim"
 
 # Ask which files should be sourced
 echo "Do you want $SH to source: "
@@ -30,5 +32,5 @@ for file in shell/*; do
 done
 
 if ask "Install config files?"; then
-    stow .
+    stow -v -t "$HOME" .
 fi
