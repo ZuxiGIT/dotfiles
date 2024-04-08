@@ -9,10 +9,10 @@ return {
         end,
         config = function()
             local api = require('nvim-tree.api')
-            local set = vim.keymap.set
 
-            set('n', '<C-n>', api.tree.toggle)
-
+            require('which-key').register({
+                ['<c-n>'] = {api.tree.toggle, "Toggle source tree"}
+            }, {})
             require('nvim-tree').setup()
         end
     },
