@@ -1,6 +1,11 @@
 vim.cmd('unmap Y')
 vim.cmd('let g:netrw_listtyle = 3')
 
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*" },
+  command = [[%s/\s\+$//e]],
+})
+
 local set = vim.opt
 
 set.colorcolumn = "120"
