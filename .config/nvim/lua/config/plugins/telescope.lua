@@ -23,9 +23,6 @@ return {
         end, 'Find string in help tags')
 
         map('n', '<leader>fs', builtin.grep_string, 'Find string under cursor')
-        map('n', '<leader>fr', builtin.lsp_references, 'Find references')
-        map('n', '<leader>fd', builtin.lsp_definitions, 'Find definitions')
-
 
         require('telescope').setup({
             defaults = {

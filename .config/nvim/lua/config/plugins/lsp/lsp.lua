@@ -35,6 +35,10 @@ return {
                 map('n', '<space>rn', vim.lsp.buf.rename, 'Rename all references', opts)
                 map({'n', 'v'}, '<space>ca', vim.lsp.buf.code_action, 'Select a code action', opts)
                 map('n', '<space>ft', function() vim.lsp.buf.format { async = true } end, 'Format', opts)
+
+                map('n', '<leader>fr', ":Telescope lsp_references {layout_strategy='vertical'}<CR>", 'Find references')
+                map('n', '<leader>fd', ":Telescope lsp_definitions {layout_strategy='vertical'}<CR>", 'Find definitions')
+
         end,
         })
     end
