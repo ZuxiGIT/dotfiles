@@ -8,8 +8,6 @@ return {
     end,
     config = function()
         local api = require('nvim-tree.api')
-        require('nvim-tree').setup()
-
         local function map(mode, l, r, desc)
             vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
         end
@@ -20,5 +18,7 @@ return {
         end, "Toggle file explorer on current file")
         map('n', '<leader>ec', api.tree.collapse_all, "Collapse file explorer")
         map('n', '<leader>er', api.tree.reload, "Refresh file explorer")
+
+        require('nvim-tree').setup()
     end
 }
