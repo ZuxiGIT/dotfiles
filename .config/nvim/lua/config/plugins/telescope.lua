@@ -22,7 +22,9 @@ return {
             builtin.help_tags({ layout_strategy = 'vertical' })
         end, 'Find string in help tags')
 
-        map('n', '<leader>fs', builtin.grep_string, 'Find string under cursor')
+        map('n', '<leader>fs', function ()
+            builtin.grep_string({ layout_strategy = 'vertical' })
+        end, 'Find string under cursor')
 
         require('telescope').setup({
             defaults = {
