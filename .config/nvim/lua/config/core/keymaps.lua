@@ -13,7 +13,8 @@ keymap.set("n", "<space>sh", "<C-w>s", { desc = "Split window horizontally" })  
 keymap.set("n", "<space>se", "<C-w>=", { desc = "Make splits equal size" })     -- make split windows equal width & height
 keymap.set("n", "<space>sx", "<cmd>close<CR>", { desc = "Close current split" })-- close current split window
 
-keymap.set("n", "<space>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })          -- open new tab
+keymap.set("n", "<space>to", "<cmd>tabonly<CR>", { desc = "Close all tabs except the active one" })  -- close all tabs except the active one
+keymap.set("n", "<space>te", "<cmd>tabnew<CR>", { desc = "Open new tab" })          -- open new tab
 keymap.set("n", "<space>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" })   -- close current tab
 keymap.set("n", "<space>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" })          --  go to next tab
 keymap.set("n", "<space>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })      --  go to previous tab
