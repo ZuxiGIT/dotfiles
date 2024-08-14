@@ -33,3 +33,7 @@ set.fileencodings="utf8,cp1251"
 set.ruler = true
 set.swapfile = false
 set.hlsearch = false
+
+-- Split below and right
+set.splitbelow = true
+set.splitright = true
