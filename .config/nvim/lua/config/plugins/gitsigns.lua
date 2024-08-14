@@ -1,3 +1,8 @@
+local utils = require('utils')
+local nmap  = utils.nmap
+local vmap  = utils.vmap
+local map   = utils.map
+
 return {
     -- {
     --     'tpope/vim-fugitive',
@@ -8,36 +13,32 @@ return {
         on_attach = function(bufnr)
             local gs = require('gitsigns')
 
-            local function map(mode, l, r, desc)
-                vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
-            end
+            nmap(']h', gs.next_hunk, 'Next hunk')
+            nmap('[h', gs.prev_hunk, 'Prev hunk')
 
-            map('n', ']h', gs.next_hunk, 'Next hunk')
-            map('n', '[h', gs.prev_hunk, 'Prev hunk')
-
-            map('n', '<leader>hs', gs.stage_hunk, 'Stage hunk')
-            map('v', '<leader>hs', function ()
+            nmap('<leader>hs', gs.stage_hunk, 'Stage hunk')
+            vmap('<leader>hs', function ()
                 gs.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
             end, "Stage hunk")
 
-            map('n', '<leader>hr', gs.reset_hunk, 'Reset hunk')
-            map('v', '<leader>hr', function ()
+            nmap('<leader>hr', gs.reset_hunk, 'Reset hunk')
+            vmap('<leader>hr', function ()
                 gs.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
             end, "Reset hunk")
 
-            map('n', '<leader>hS', gs.stage_buffer, 'Stage buffer')
-            map('n', '<leader>hR', gs.reset_buffer, 'Reset buffer')
+            nmap('<leader>hS', gs.stage_buffer, 'Stage buffer')
+            nmap('<leader>hR', gs.reset_buffer, 'Reset buffer')
 
-            map('n', '<leader>hu', gs.undo_stage_hunk, 'Undo stage hunk')
-            map('n', '<leader>hp', gs.preview_hunk, 'Preview hunk')
+            nmap('<leader>hu', gs.undo_stage_hunk, 'Undo stage hunk')
+            nmap('<leader>hp', gs.preview_hunk, 'Preview hunk')
 
-            map('n', '<leader>hb', function()
+            nmap('<leader>hb', function()
                 gs.blame_line({ full = true })
             end, "Blame line")
-            map('n', '<leader>hB', gs.toggle_current_line_blame, 'Toggle line blame')
+            nmap('<leader>hB', gs.toggle_current_line_blame, 'Toggle line blame')
 
-            map('n', '<leader>hd', gs.diffthis, 'Diff this')
-            map('n', '<leader>hD', function()
+            nmap('<leader>hd', gs.diffthis, 'Diff this')
+            nmap('<leader>hD', function()
                 gs.diffthis('~')
             end, 'Diff this ~')
 

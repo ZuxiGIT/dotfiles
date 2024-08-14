@@ -1,3 +1,7 @@
+local utils = require('utils')
+local nmap  = utils.nmap
+local imap  = utils.imap
+
 return {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -8,16 +12,13 @@ return {
     end,
     config = function()
         local api = require('nvim-tree.api')
-        local function map(mode, l, r, desc)
-            vim.keymap.set(mode, l, r, { buffer = bufnr, desc = desc })
-        end
 
-        map('n', '<C-n>', api.tree.toggle, "Toggle file explorer")
-        map('n', '<leader>ef', function()
+        nmap('<C-n>', api.tree.toggle, "Toggle file explorer")
+        nmap('<leader>ef', function()
             api.tree.toggle({ find_file = true, focus = true, })
         end, "Toggle file explorer on current file")
-        map('n', '<leader>ec', api.tree.collapse_all, "Collapse file explorer")
-        map('n', '<leader>er', api.tree.reload, "Refresh file explorer")
+        nmap('<leader>ec', api.tree.collapse_all, "Collapse file explorer")
+        nmap('<leader>er', api.tree.reload, "Refresh file explorer")
 
         require('nvim-tree').setup()
     end

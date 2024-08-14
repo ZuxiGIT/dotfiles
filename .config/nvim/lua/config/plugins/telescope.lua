@@ -1,3 +1,6 @@
+local utils = require('utils')
+local nmap  = utils.nmap
+
 return {
     'nvim-telescope/telescope.nvim',
     dependencies = {
@@ -10,23 +13,19 @@ return {
         local live_grep_args = require('telescope').load_extension('live_grep_args')
 
 
-        local function map(mode, l, r, desc)
-            vim.keymap.set(mode, l, r, { desc = desc})
-        end
+        nmap('<leader>ff', builtin.find_files, 'Find file')
 
-        map('n', '<leader>ff', builtin.find_files, 'Find file')
-
-        map('n', '<leader>fg', function ()
+        nmap('<leader>fg', function ()
             live_grep_args.live_grep_args({ layout_strategy = 'vertical' })
         end, 'Find string')
 
-        map('n', '<leader>fb', builtin.buffers, 'Find buffers')
+        nmap('<leader>fb', builtin.buffers, 'Find buffers')
 
-        map('n', '<leader>fh', function ()
+        nmap('<leader>fh', function ()
             builtin.help_tags({ layout_strategy = 'vertical' })
         end, 'Find string in help tags')
 
-        map('n', '<leader>fs', function ()
+        nmap('<leader>fs', function ()
             builtin.grep_string({ layout_strategy = 'vertical' })
         end, 'Find string under cursor')
 

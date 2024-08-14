@@ -1,13 +1,12 @@
+local utils = require('utils')
+local nmap  = utils.nmap
+
 return {
     'tpope/vim-fugitive',
     config = function()
-        local function map(mode, l, r, desc)
-            vim.keymap.set(mode, l, r, { desc = desc})
-        end
-
-        map('n', '<leader>gb', ':Git blame<CR>',  'Git blame')
-        map('n', '<leader>gs', ':Git status<CR>', 'Git status')
-        map('n', '<leader>G',  ':Git<CR>',        'Git')
+        nmap('<leader>gb', ':Git blame<CR>',  'Git blame')
+        nmap('<leader>gs', ':Git status<CR>', 'Git status')
+        nmap('<leader>G',  ':Git<CR>',        'Git')
 
     end
 }
