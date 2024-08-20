@@ -62,6 +62,10 @@ return {
         config = true
     },
     {
+        'j-hui/fidget.nvim',
+        config = true,
+    },
+    {
         'neovim/nvim-lspconfig',
         dependencies = {
             'williamboman/mason.nvim',
