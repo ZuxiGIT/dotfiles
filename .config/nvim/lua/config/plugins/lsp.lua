@@ -36,7 +36,12 @@ end
 
 local mason_handlers = {
     function (server_name) -- default handler (optional)
-        require('lspconfig')[server_name].setup({})
+        local lspconfig = require('lspconfig')
+        local capabilities = require('cmp_nvim_lsp').default_capabilities()
+        lspconfig[server_name].setup({
+            on_attach = on_attach,
+            capabilities = capabilities,
+        })
     end,
     ['lua_ls'] = function()
         local lspconfig = require('lspconfig')
