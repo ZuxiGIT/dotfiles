@@ -17,8 +17,7 @@ SH="${HOME}/.bashrc"
 
 echo >> "$SH"
 echo "# -------------- automatically added: dotfiles install ---------------" >> "$SH"
-echo "export EDITOR=nvim"
-echo "export TIG_EDITOR=nvim"
+echo "source $(dirname $(realpath "$0"))/bashrc.sh" >> $SH
 
 # Ask which files should be sourced
 echo "Do you want $SH to source: "
