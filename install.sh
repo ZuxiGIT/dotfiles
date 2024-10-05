@@ -17,7 +17,6 @@ SH="${HOME}/.bashrc"
 
 echo >> "$SH"
 echo "# -------------- automatically added: dotfiles install ---------------" >> "$SH"
-echo "source $(dirname $(realpath "$0"))/bashrc.sh" >> $SH
 
 # Ask which files should be sourced
 echo "Do you want $SH to source: "
