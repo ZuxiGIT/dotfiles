@@ -1,0 +1,13 @@
+diff --git a/common/graph.cc b/common/graph.cc
+index 3659a0c..45caa45 100644
+--- a/common/graph.cc
++++ b/common/graph.cc
+@@ -31,7 +31,7 @@ std::string get_graph_by_percentage( unsigned value, unsigned len )
+ 
+   for( ; step < bar_count; step++ )
+   {
+-    bars.append( "|" );
++    bars.append( "\u25A0" );
+   }
+   for( ; step < len; step++ )
+   {

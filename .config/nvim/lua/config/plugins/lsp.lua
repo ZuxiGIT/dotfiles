@@ -22,7 +22,7 @@ local on_attach = function(client, bufnr)
 
     nmap('K', vim.lsp.buf.hover, 'Hover information for word under cursor', opts)
     nmap('<c-LeftMouse>', '<LeftMouse><cmd>lua vim.lsp.buf.hover()<cr>', 'ctrl-click to hover info')
-    nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature information', opts)
+    nmap('I', vim.lsp.buf.signature_help, 'Signature information', opts)
     nmap('<space>e', vim.diagnostic.open_float, 'Show diagnostics in a floating window.', opts)
     nmap('<space>q', vim.diagnostic.setloclist, 'Add buffer diagnostics to the location list.', opts)
     nmap('<space>D', vim.lsp.buf.type_definition, 'Jumps to the definition of the type of the symbol', opts)
