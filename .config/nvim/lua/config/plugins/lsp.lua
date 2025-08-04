@@ -67,6 +67,11 @@ return {
         config = true
     },
     {
+        'williamboman/mason-lspconfig.nvim',
+        version = 'v1.32.0',
+        config = true
+    },
+    {
         'j-hui/fidget.nvim',
         config = true,
     },
