@@ -1,7 +1,16 @@
+-- return {
+--     'navarasu/onedark.nvim',
+--     config = function()
+--         require('onedark').setup({ style = 'warmer' })
+--         require('onedark').load()
+--     end
+-- }
+
 return {
-    'navarasu/onedark.nvim',
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000 ,
     config = function()
-        require('onedark').setup({ style = 'warmer' })
-        require('onedark').load()
-    end
+        vim.o.background = "dark" -- or "light" for light mode
+        vim.cmd([[colorscheme gruvbox]])
+    end,
 }

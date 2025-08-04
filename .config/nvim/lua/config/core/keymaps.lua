@@ -1,8 +1,10 @@
 local utils = require('utils')
 local nmap  = utils.nmap
 local imap  = utils.imap
+local cmap  = utils.tmap
 
 imap("jk", "<ESC>", "Exit insert mode with jk")
+cmap("jk", "<ESC>", "Exit insert mode with jk")
 nmap("<space>nh", ":nohl<CR>", "Clear search highlights")
 
 -- increment/decrement numbers

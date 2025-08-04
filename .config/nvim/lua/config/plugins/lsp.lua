@@ -30,8 +30,8 @@ local on_attach = function(client, bufnr)
     map({'n', 'v'}, '<space>ca', vim.lsp.buf.code_action, 'Select a code action', opts)
     nmap('<space>ft', function() vim.lsp.buf.format { async = true } end, 'Format code', opts)
 
-    nmap('<leader>fr', ':Telescope lsp_references {layout_strategy=\'vertical\'}<CR>', 'Find references')
-    nmap('<leader>fd', ':Telescope lsp_definitions {layout_strategy=\'vertical\'}<CR>', 'Find definitions')
+    nmap('<leader>fr', ':Telescope lsp_references layout_strategy=vertical<CR>', 'Find references')
+    nmap('<leader>fd', ':Telescope lsp_definitions layout_strategy=vertical<CR>', 'Find definitions')
 end
 
 local mason_handlers = {
