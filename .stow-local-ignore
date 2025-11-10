@@ -1,4 +1,6 @@
 shell
 install.sh
 README.md
-\.git
+.gitignore
+.git
+patches
