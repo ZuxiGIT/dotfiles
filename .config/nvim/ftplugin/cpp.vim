@@ -1,2 +1,2 @@
 " switch between header and source
-nnoremap <Leader>s :ClangdSwitchSourceHeader<cr>
+nnoremap <Leader>s :LspClangdSwitchSourceHeader<cr>
