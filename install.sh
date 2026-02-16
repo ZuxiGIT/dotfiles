@@ -30,7 +30,7 @@ for file in shell/*; do
 done
 
 if ask 'Install config files?'; then
-    if [ -z $(command -v stow &> /dev/null) ]; then
+    if [ -z "$(command -v stow &> /dev/null)" ]; then
         echo 'Stow is not installed'
 	if ask 'Install stow?'; then
 	    sudo apt install stow
@@ -44,11 +44,11 @@ fi
 if ask 'Install neovim?'; then
     sudo apt install cmake make build-essential
     TMP_DIR=$(mktemp -d)
-    git clone -b 'v0.11.5' https://github.com/neovim/neovim $TMP_DIR
-    pushd $TMP_DIR
+    git clone -b 'v0.11.5' https://github.com/neovim/neovim "$TMP_DIR"
+    pushd "$TMP_DIR" || exit 1
     make CMAKE_BUILD_TYPE=Release -j
     sudo make install -j
-    popd
+    popd || exit 1
 fi
 
 # Install tmux
@@ -63,9 +63,9 @@ fi
 if ask 'Install tig?'; then
     TMP_DIR=$(mktemp -d)
     # Install tmux plugin manager
-    git clone https://github.com/jonas/tig $TMP_DIR
-    pushd $TMP_DIR
+    git clone https://github.com/jonas/tig "$TMP_DIR"
+    pushd "$TMP_DIR" || exit 1
     make prefix=/usr/local -j
     sudo make install prefix=/usr/local -j
-    popd
+    popd || exit 1
 fi
