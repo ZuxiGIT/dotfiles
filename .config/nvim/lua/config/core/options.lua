@@ -8,6 +8,10 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 
 local set = vim.opt
 
+set.list = true
+set.listchars:append('lead:⋅')
+set.listchars:append('eol:↴')
+
 set.colorcolumn = "120"
 set.cursorline = true
 set.number = true
