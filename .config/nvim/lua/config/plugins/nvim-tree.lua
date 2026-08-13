@@ -1,6 +1,5 @@
 local utils = require('utils')
 local nmap  = utils.nmap
-local imap  = utils.imap
 
 return {
     'nvim-tree/nvim-tree.lua',
@@ -11,6 +10,8 @@ return {
         vim.g.loaded_netrwPlugin = 1
     end,
     config = function()
+        require('nvim-tree').setup()
+
         local api = require('nvim-tree.api')
 
         nmap('<C-n>', api.tree.toggle, "Toggle file explorer")
@@ -19,7 +20,5 @@ return {
         end, "Toggle file explorer on current file")
         nmap('<leader>ec', api.tree.collapse_all, "Collapse file explorer")
         nmap('<leader>er', api.tree.reload, "Refresh file explorer")
-
-        require('nvim-tree').setup()
     end
 }
