@@ -1,5 +1,11 @@
 local M = {}
 
+function M.is_large_file(bufnr, max_file_size)
+  local file_name = vim.api.nvim_buf_get_name(bufnr)
+  local ok, stat = pcall(vim.uv.fs_stat, file_name)
+  return ok and stat and stat.size > max_file_size
+end
+
 local function map(mode, from, to, desc, opts)
   opts = opts or { silent = true }
   opts.desc = desc

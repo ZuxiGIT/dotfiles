@@ -1,4 +1,12 @@
+local utils = require('utils')
+
+local MAX_FILE_SIZE = 1024 * 1024
+
 local trailing_whitespaces = function()
+    if utils.is_large_file(0, MAX_FILE_SIZE) then
+        return ''
+    end
+
     local space = vim.fn.search([[\s\+$]], 'nwc')
     return space ~= 0 and "TW:"..space or ""
 end
