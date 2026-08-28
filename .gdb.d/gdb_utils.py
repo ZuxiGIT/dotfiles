@@ -9,6 +9,7 @@ Commands compare target memory with quoted strings in the GDB command line:
   raw-str-eq ADDRESS STRING
   raw-mem-eq ADDRESS STRING LEN
   raw-str-len A
+  raw-str-view-eq VIEW STRING
 """
 
 import gdb
@@ -34,6 +35,26 @@ def _read_c_string(value):
             result.extend(chunk[:terminator])
             return bytes(result)
         result.extend(chunk)
+
+
+def _read_string_view(value):
+    """Read a std::string_view's bytes from target memory without method calls."""
+    if value.type.code == gdb.TYPE_CODE_REF:
+        value = value.referenced_value()
+
+    try:
+        data = value['_M_str']
+        size = int(value['_M_len'])
+    except gdb.error:
+        try:
+            data = value['__data_']
+            size = int(value['__size_'])
+        except gdb.error as error:
+            raise gdb.GdbError('expected a libstdc++ or libc++ std::string_view') from error
+
+    if size < 0:
+        raise gdb.GdbError('std::string_view has a negative size')
+    return bytes(gdb.selected_inferior().read_memory(_address(data), size))
 
 
 def _raw_argv(arg, expected, usage):
@@ -196,9 +217,35 @@ class RawStrLen(gdb.Command):
         gdb.write("{}\n".format(len(value.encode())))
 
 
+class RawStrViewEq(gdb.Command):
+    """raw-str-view-eq VIEW STRING: compare a target std::string_view and raw text.
+
+    Help:
+      VIEW is a GDB expression whose value is a libstdc++ or libc++
+      std::string_view.  STRING is a quoted command argument held outside the
+      inferior.  Prints 1 when their UTF-8 byte sequences are equal, otherwise
+      0.  It reads VIEW's data pointer and length directly; no native method is
+      called and no NUL terminator is required.
+      Example: raw-str-view-eq name "expected text"
+    """
+
+    def __init__(self):
+        super().__init__('raw-str-view-eq', gdb.COMMAND_DATA)
+
+    def invoke(self, arg, from_tty):
+        view, raw_string = _raw_argv(arg, 2, 'raw-str-view-eq VIEW "STRING"')
+        try:
+            target_bytes = _read_string_view(gdb.parse_and_eval(view))
+        except gdb.MemoryError:
+            gdb.write('0\n')
+            return
+        gdb.write('{}\n'.format(int(target_bytes == raw_string.encode())))
+
+
 TargetStrEq()
 TargetMemEq()
 TargetStrLen()
 RawStrEq()
 RawMemEq()
 RawStrLen()
+RawStrViewEq()
