@@ -1,9 +1,14 @@
-"""General GDB target-memory string helpers.
+"""General GDB string helpers.
 
-Functions read inferior memory only and never execute inferior code:
-  $_Streq(A, B)
-  $_Memeq(A, B, LEN)
-  $_Strlen(A)
+Commands read inferior memory only and never execute inferior code:
+  target-str-eq ADDRESS_A ADDRESS_B
+  target-mem-eq ADDRESS_A ADDRESS_B LEN
+  target-str-len ADDRESS
+
+Commands compare target memory with quoted strings in the GDB command line:
+  raw-str-eq ADDRESS STRING
+  raw-mem-eq ADDRESS STRING LEN
+  raw-str-len A
 """
 
 import gdb
@@ -31,68 +36,169 @@ def _read_c_string(value):
         result.extend(chunk)
 
 
-class PyStrEq(gdb.Function):
-    """$_Streq(A, B): compare target NUL-terminated strings.
+def _raw_argv(arg, expected, usage):
+    """Parse exactly EXPECTED command-line arguments."""
+    argv = gdb.string_to_argv(arg)
+    if len(argv) != expected:
+        raise gdb.GdbError("usage: {}".format(usage))
+    return argv
+
+
+class TargetStrEq(gdb.Command):
+    """target-str-eq ADDRESS_A ADDRESS_B: compare target C strings.
 
     Help:
-      A and B must point to NUL-terminated strings in target memory.
-      Returns 1 when the strings are equal, otherwise 0.  Returns 0 when
-      either string cannot be read.
+      Both arguments are GDB expressions that evaluate to target-memory
+      pointers.  Prints 1 when their NUL-terminated byte strings are equal,
+      otherwise 0.  It only inspects target memory.
+      Example: target-str-eq first_ptr second_ptr
     """
 
     def __init__(self):
-        super().__init__("_Streq")
+        super().__init__('target-str-eq', gdb.COMMAND_DATA)
 
-    def invoke(self, left, right):
+    def invoke(self, arg, from_tty):
+        left, right = _raw_argv(arg, 2, 'target-str-eq ADDRESS_A ADDRESS_B')
         try:
-            return int(_read_c_string(left) == _read_c_string(right))
+            result = _read_c_string(gdb.parse_and_eval(left)) == _read_c_string(gdb.parse_and_eval(right))
         except gdb.MemoryError:
-            return 0
+            result = False
+        gdb.write('{}\n'.format(int(result)))
 
 
-class PyMemEq(gdb.Function):
-    """$_Memeq(A, B, LEN): compare LEN target-memory bytes.
+class TargetMemEq(gdb.Command):
+    """target-mem-eq ADDRESS_A ADDRESS_B LEN: compare target-memory bytes.
 
     Help:
-      A and B must point to at least LEN readable bytes in target memory.
-      Returns 1 when the byte sequences are equal, otherwise 0.  Negative
-      lengths and memory-read failures return 0.
+      ADDRESS_A and ADDRESS_B are GDB expressions that evaluate to target
+      pointers.  Prints 1 when their first LEN bytes are equal, otherwise 0.
+      A negative LEN or a memory-read failure prints 0.
+      Example: target-mem-eq first_ptr second_ptr 16
     """
 
     def __init__(self):
-        super().__init__("_Memeq")
+        super().__init__('target-mem-eq', gdb.COMMAND_DATA)
 
-    def invoke(self, left, right, length):
+    def invoke(self, arg, from_tty):
+        left, right, length = _raw_argv(arg, 3, 'target-mem-eq ADDRESS_A ADDRESS_B LEN')
         try:
-            size = int(length)
-            if size < 0:
-                return 0
+            size = int(length, 0)
+        except ValueError as error:
+            raise gdb.GdbError('LEN must be an integer') from error
+        if size < 0:
+            gdb.write('0\n')
+            return
+        try:
             inferior = gdb.selected_inferior()
-            return int(inferior.read_memory(_address(left), size) ==
-                       inferior.read_memory(_address(right), size))
+            result = inferior.read_memory(_address(gdb.parse_and_eval(left)), size) == \
+                inferior.read_memory(_address(gdb.parse_and_eval(right)), size)
         except gdb.MemoryError:
-            return 0
+            result = False
+        gdb.write('{}\n'.format(int(result)))
 
 
-class PyStrLen(gdb.Function):
-    """$_Strlen(A): length of a target NUL-terminated string.
+class TargetStrLen(gdb.Command):
+    """target-str-len ADDRESS: count bytes in a target C string.
 
     Help:
-      A must point to a NUL-terminated string in target memory.  Returns its
-      length in bytes, excluding the terminator.  Returns 0 if it cannot be
-      read.
+      ADDRESS is a GDB expression that evaluates to a target-memory pointer.
+      Prints the NUL-terminated string length in bytes, excluding its
+      terminator.  It prints 0 if target memory cannot be read.
+      Example: target-str-len ptr
     """
 
     def __init__(self):
-        super().__init__("_Strlen")
+        super().__init__('target-str-len', gdb.COMMAND_DATA)
 
-    def invoke(self, value):
+    def invoke(self, arg, from_tty):
+        (address,) = _raw_argv(arg, 1, 'target-str-len ADDRESS')
         try:
-            return len(_read_c_string(value))
+            result = len(_read_c_string(gdb.parse_and_eval(address)))
         except gdb.MemoryError:
-            return 0
+            result = 0
+        gdb.write('{}\n'.format(result))
 
 
-PyStrEq()
-PyMemEq()
-PyStrLen()
+class RawStrEq(gdb.Command):
+    """raw-str-eq ADDRESS STRING: compare target and raw NUL-terminated strings.
+
+    Help:
+      ADDRESS is a GDB expression that evaluates to a target-memory pointer.
+      STRING is a quoted command argument, kept in GDB Python rather than
+      materialized in inferior memory.  Prints 1 when the target C string and
+      STRING's UTF-8 bytes are equal, otherwise 0.
+      Example: raw-str-eq ptr "hello world"
+    """
+
+    def __init__(self):
+        super().__init__("raw-str-eq", gdb.COMMAND_DATA)
+
+    def invoke(self, arg, from_tty):
+        address, raw_string = _raw_argv(arg, 2, 'raw-str-eq ADDRESS "STRING"')
+        try:
+            target_string = _read_c_string(gdb.parse_and_eval(address))
+        except gdb.MemoryError:
+            gdb.write("0\n")
+            return
+        gdb.write("{}\n".format(int(target_string == raw_string.encode())))
+
+
+class RawMemEq(gdb.Command):
+    """raw-mem-eq ADDRESS STRING LEN: compare target bytes and a raw string.
+
+    Help:
+      ADDRESS is a GDB expression that evaluates to a target-memory pointer.
+      STRING is a quoted command argument, held outside inferior memory.
+      Prints 1 when the first LEN target bytes equal STRING's first LEN UTF-8
+      bytes.  It prints 0 when STRING is shorter than LEN or the target cannot
+      be read.  A negative LEN is an error.
+      Example: raw-mem-eq ptr "helium" 3
+    """
+
+    def __init__(self):
+        super().__init__("raw-mem-eq", gdb.COMMAND_DATA)
+
+    def invoke(self, arg, from_tty):
+        address, raw_string, length = _raw_argv(arg, 3, 'raw-mem-eq ADDRESS "STRING" LEN')
+        try:
+            size = int(length, 0)
+        except ValueError as error:
+            raise gdb.GdbError("LEN must be an integer") from error
+        if size < 0:
+            raise gdb.GdbError("LEN must not be negative")
+        raw_bytes = raw_string.encode()
+        if size > len(raw_bytes):
+            gdb.write("0\n")
+            return
+        try:
+            target_bytes = bytes(gdb.selected_inferior().read_memory(
+                _address(gdb.parse_and_eval(address)), size))
+        except gdb.MemoryError:
+            gdb.write("0\n")
+            return
+        gdb.write("{}\n".format(int(target_bytes == raw_bytes[:size])))
+
+
+class RawStrLen(gdb.Command):
+    """raw-str-len A: count UTF-8 bytes in a raw GDB command-line string.
+
+    Help:
+      A is a quoted command argument, parsed without accessing inferior
+      memory.  Prints its UTF-8 byte length.
+      Example: raw-str-len "hello world"
+    """
+
+    def __init__(self):
+        super().__init__("raw-str-len", gdb.COMMAND_DATA)
+
+    def invoke(self, arg, from_tty):
+        (value,) = _raw_argv(arg, 1, 'raw-str-len "A"')
+        gdb.write("{}\n".format(len(value.encode())))
+
+
+TargetStrEq()
+TargetMemEq()
+TargetStrLen()
+RawStrEq()
+RawMemEq()
+RawStrLen()
